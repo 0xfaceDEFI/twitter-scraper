@@ -3,7 +3,9 @@ package twitterscraper
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"io/ioutil"
+	"moul.io/http2curl"
 	"net/http"
 	"time"
 )
@@ -38,7 +40,8 @@ func (s *Scraper) RequestAPI(req *http.Request, target interface{}) error {
 		req.Header.Set("Cookie", s.cookie)
 		req.Header.Set("x-csrf-token", s.xCsrfToken)
 	}
-
+	curl, _ := http2curl.GetCurlCommand(req)
+	logrus.Infof("RequestAPI curl : %v", curl)
 	resp, err := s.client.Do(req)
 	if err != nil {
 		return err
